@@ -13,6 +13,8 @@ locale.setlocale(locale.LC_ALL, '')
 code = locale.getpreferredencoding()
 
 debug = False
+
+SEED = -1
 DIFFICULTY = -1
 
 DRAW_LOCK = Lock()
@@ -113,7 +115,7 @@ def main(stdscr):
     clock = Clock()
     clock_thread = Thread(target=runClock, args=(clock, time, stdscr))
 
-    _board = Board(DIFFICULTY)
+    _board = Board(DIFFICULTY, SEED)
     mines.box(curses.ACS_VLINE, curses.ACS_HLINE)
     game.box(curses.ACS_VLINE, curses.ACS_HLINE) 
     time.box(curses.ACS_VLINE, curses.ACS_HLINE)
@@ -215,6 +217,7 @@ if __name__ == "__main__":
         sys.exit(0)
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--difficulty", help="Difficulty. Either a 0, 1, or 2 for easy, medium, and hard.")
+    parser.add_argument("-s", "--seed", help="Seed to regenerate boards.")
     args = parser.parse_args()
     try:
         difficulty = int(args.difficulty)
@@ -223,6 +226,12 @@ if __name__ == "__main__":
     if difficulty not in [0, 1, 2]:
         print("Difficulty must be a 0, 1, or 2.")
         sys.exit(1)
+    if args.seed:
+        try:
+            SEED = int(args.seed)
+        except:
+            print("Seed must be an integer value.")
+            sys.exit(1)
     DIFFICULTY = difficulty
     y_max = SIZES[DIFFICULTY][0]
     x_max = SIZES[DIFFICULTY][1]

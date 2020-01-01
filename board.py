@@ -2,13 +2,14 @@ from consts import BOARD_HEIGHT, SIZES
 from square import Square
 import random
 class Board:
-    def __init__(self, difficulty=0):
+    def __init__(self, difficulty=0, SEED=-1):
         # + 2 because of the bottom/top or left/right
         self.width = SIZES[difficulty][0]
         self.height = SIZES[difficulty][1]
         self.num_mines = SIZES[difficulty][2]
         self.board = []
         self.mines = []
+        self.seed = SEED
 
     def getRandomSquare(self):
         return random.randint(0, self.height - 1), random.randint(0, self.width - 1)
@@ -79,6 +80,9 @@ class Board:
             self.board.append([])
             for x in range(0, self.width):
                 self.board[y].append(Square(y, x))
+
+        if self.seed != -1:
+            random.seed(self.seed)
 
         for i in range(0,self.num_mines):
             y, x = self.getRandomSquare()
