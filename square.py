@@ -6,3 +6,4 @@ class Square:
         self.is_mine = False
         self.marked_mine = False
         self.marked_not_mine = False
+        self.visited = False
